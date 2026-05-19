@@ -36,7 +36,10 @@ const Navbar = () => {
           <NavLink to="/complaints/new" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
             + New
           </NavLink>
-          <span className="nav-user">👤 {user?.name}</span>
+          <span className="nav-user">
+            {user?.role === 'admin' && <span className="badge badge-critical" style={{ background: 'rgba(99,102,241,.2)', color: 'var(--secondary)', borderColor: 'var(--primary)', marginRight: 6 }}>👑 Admin</span>}
+            👤 {user?.name}
+          </span>
           <button className="btn btn-ghost btn-sm" onClick={handleLogout}>Logout</button>
         </div>
       </div>

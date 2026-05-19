@@ -7,12 +7,13 @@ const router = express.Router();
 // ─── POST /api/complaints ──────────────────────────────────────────────────────
 router.post('/', protect, async (req, res, next) => {
   try {
-    const { name, email, title, description, category, location } = req.body;
+    const { name, email, title, description, category, location, aiAnalysis } = req.body;
     if (!name || !email || !title || !description || !category || !location)
       return res.status(400).json({ success: false, message: 'All fields are required.' });
 
-    const complaint = await Complaint.create({ name, email, title, description, category, location });
+    const complaint = await Complaint.create({ name, email, title, description, category, location, aiAnalysis });
     res.status(201).json({ success: true, message: 'Complaint submitted successfully.', data: complaint });
+
   } catch (err) {
     if (err.name === 'ValidationError') {
       const msg = Object.values(err.errors).map(e => e.message).join(', ');

@@ -29,6 +29,7 @@ export const deleteComplaint    = (id)            => api.delete(`/complaints/${i
 export const searchByLocation   = (location)      => api.get('/complaints/search', { params: { location } });
 
 // ─── AI ────────────────────────────────────────────────────────────────────────
-export const analyzeComplaint   = (data)          => api.post('/ai/analyze', data);
+export const categorizeComplaint = (data) => api.post('/ai/categorize', data);  // user
+export const analyzeComplaint    = (data) => api.post('/ai/analyze',    data);  // admin only
 
 export default api;

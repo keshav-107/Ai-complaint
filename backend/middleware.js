@@ -18,6 +18,15 @@ const protect = (req, res, next) => {
 };
 
 /**
+ * isAdmin – Must be used AFTER protect. Restricts route to admin role only.
+ */
+const isAdmin = (req, res, next) => {
+  if (req.user?.role !== 'admin')
+    return res.status(403).json({ success: false, message: 'Admin access required.' });
+  next();
+};
+
+/**
  * errorHandler – Global Express error-handling middleware
  */
 const errorHandler = (err, req, res, next) => {
@@ -28,4 +37,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = { protect, errorHandler };
+module.exports = { protect, isAdmin, errorHandler };

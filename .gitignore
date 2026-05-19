@@ -6,6 +6,10 @@ node_modules/
 .env.local
 .env.production
 
+# Seed scripts - contain sensitive admin credentials
+seed.js
+backend/seed.js
+
 # Build output
 dist/
 build/
