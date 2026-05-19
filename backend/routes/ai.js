@@ -13,7 +13,7 @@ router.post('/analyze', protect, async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'title, description, and category are required.' });
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const prompt = `
 You are an AI system for a government complaint tracking portal.
