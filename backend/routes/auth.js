@@ -59,4 +59,35 @@ router.post('/login', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ─── GET /api/auth/seed-admin?secret=SEED_SECRET ──────────────────────────────
+// One-time route to create the admin account on Render.
+// Protected by SEED_SECRET env var. Safe to call multiple times (idempotent).
+router.get('/seed-admin', async (req, res, next) => {
+  try {
+    // Verify secret
+    const { secret } = req.query;
+    if (!process.env.SEED_SECRET || secret !== process.env.SEED_SECRET)
+      return res.status(403).json({ success: false, message: 'Invalid seed secret.' });
+
+    // Idempotent — skip if admin already exists
+    const existing = await User.findOne({ role: 'admin' });
+    if (existing)
+      return res.json({ success: true, message: 'Admin already exists.', email: existing.email });
+
+    const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'Admin@1234', 12);
+    const admin  = await User.create({
+      name:     process.env.ADMIN_NAME     || 'Admin',
+      email:    process.env.ADMIN_EMAIL    || 'admin@complaintai.com',
+      password: hashed,
+      role:     'admin'
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin created successfully.',
+      email:   admin.email
+    });
+  } catch (err) { next(err); }
+});
+
 module.exports = router;
