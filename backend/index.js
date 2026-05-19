@@ -12,7 +12,20 @@ const app  = express();
 const PORT = process.env.PORT || 5000;
 
 // ─── Core Middleware ───────────────────────────────────────────────────────────
-app.use(cors({ origin: '*' }));
+// Allow dev localhost + Render frontend URL (set CORS_ORIGIN in Render env vars)
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.CORS_ORIGIN
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
